@@ -6,8 +6,7 @@ import pandas as pd
 import datetime
 print("connecting to api for teachers and sections csv") 
   ############### API Call #####################
-#api_conn = BbApiConnector('resources/app_secrets.json')
-api_conn = BbApiConnector('/home/hpaadmin/BbApiConnector-Python/resources/app_secrets.json')
+api_conn = BbApiConnector('<<<change to your json secrets file>>>>>')
 bb_session = api_conn.get_session()
 
 #US = 1995, MS=1994  , LS=1993, summer=1996
@@ -132,7 +131,6 @@ for key,value in responseOfUSSections.items():
 						us_sections.append({"Name":temp1, "Teacher_id": teacher_id, "Section_id": section_id, "School_id":'US1949', "Term_start":US2Beg, "Term_end":US2End})
 							teachers.append({"Teacher_id": teacher_id, "School_id":'US1949'})
 
-#print(us_sections)
 print('us sections done')
 
 #### remove duplicate sections######
@@ -239,12 +237,8 @@ for v in tempList: #for each value in the teacher list
 			count =+1
 print("remove duplicate teachers")
 ############### create CSV #####################
-#schools_csv_headers=['School_id','School_name']
 teachers_csv_headers=['First_name', 'Last_name', 'Teacher_id', 'Teacher_Email','School_id' ]
-#students_csv_headers=['School_id', 'Student_id', 'Last_name', 'First_name']
 sections_csv_headers = ['Name','Teacher_id', 'Section_id','School_id', 'Term_start', 'Term_end']
-#enrollments_csv_headers=['School_id', 'Student_id', 'Section_id']
-#df_clean = df.drop_duplicates(subset=['timestamp', 'user_id'])
 
 #uses pandas library to write to csv
 df = pd.DataFrame(ls_sections)
@@ -258,7 +252,7 @@ print('MS sections added successfully')
 
 df = pd.DataFrame(us_sections)
 df.drop_duplicates(subset=['Section_id'], keep='first', inplace=True)
-#remove Jeff's Section for 2021-22 SY. Comment out for 2022-23 sy
+#remove a Section example
 #df = df[df['Teacher_id'] != 5839821]
 df.to_csv('sections.csv', mode='a',index=False, header=None)
 print('US sections added successfully')
