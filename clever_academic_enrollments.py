@@ -1,18 +1,17 @@
+## Add the path below ###
+
 from BbApiConnector import BbApiConnector
 from bottle import request, response, post, get, put, delete
 import json
 import csv
 import pandas as pd
-#import itertools
-#import sys
 import datetime
 print("starting connection for enrollement.csv") 
   ############### API Call #####################
-#api_conn = BbApiConnector('resources/app_secrets.json')
-api_conn = BbApiConnector('/home/hpaadmin/BbApiConnector-Python/resources/app_secrets.json')
+api_conn = BbApiConnector('<<INSERT YOUR PATH TO YOUR APP_SECRETS.JSON FILE HERE>>')
 bb_session = api_conn.get_session()
 
-#US = 1995, MS=1994  , LS=1993, summer=1996
+#US = 1995, MS=1994  , LS=1993, summer=1996 Change to reflect yours
 
 ls_uri = f'https://api.sky.blackbaud.com/school/v1/academics/sections?level_num=1993'
 req = bb_session.get(ls_uri)
@@ -58,7 +57,6 @@ for v in ls_sections: #for each value in the list sections
 				if not isinstance(v, int):
 					for each in v:
 						enrollment.append({"Student_id": each["id"], "Section_id": temp, "School_id":'LS1949'})
-#print('iterate enrollment of each section Completed')
 
 ############### iterate MS #####################
 ms_sections = []
@@ -99,8 +97,6 @@ for v in ms_sections: #for each value in the list sections
 				if not isinstance(v, int):
 					for each in v:
 						enrollment.append({"Student_id": each["id"], "Section_id": temp, "School_id":'MS1949'})
-#print('iterate enrollment of each section Completed')
-
 
 ############### iterate US #####################
 us_sections = []
@@ -159,16 +155,10 @@ for v in us_sections: #for each value in the list sections
 
 
 ############### create CSV #####################
-#schools_csv_headers=['School_id','School_name']
-#teachers_csv_headers=['School_id','Teacher_id', 'First_name', 'Last_name']
-#students_csv_headers=['School_id', 'Student_id', 'Last_name', 'First_name']
-#sections_csv_headers = ['Name','Teacher_id', 'Section_id','School_id', 'Term_start', 'Term_end']
 enrollments_csv_headers=['Student_id', 'Section_id', 'School_id']
-#df_clean = df.drop_duplicates(subset=['timestamp', 'user_id'])
 print("Creating enrollment.csv")
 #uses pandas library to write to csv
 df = pd.DataFrame(enrollment)
-#df=df.drop_duplicates(subset=['Section_id','Student_id'], inplace=True, keep='first')
 
 #remove Section example: uncomment to use
 #df = df[df['Section_id'] != 24358738]
@@ -183,7 +173,3 @@ df = pd.DataFrame(enrollment)
 df.to_csv('enrollments.csv', mode='w',index=False, header=enrollments_csv_headers)
 
 print ('enrollment.csv complete', count)
-#df_clean = df.drop_duplicates(subset=['Section_id'],keep='first',inplace=True)
-
-#print (df_clean)
-#df_state=pd.read_csv("sections.csv")
